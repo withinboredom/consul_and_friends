@@ -13,7 +13,7 @@ You can reach the nomad client at localhost:4646
 
 ## Usage
 
-`./bootstrap.sh --all`: Start all the services
-`./bootstrap.sh --consul`: Only start consul
-`./bootstrap.sh --nomad`: Only start nomad (requires consul)
+- `./bootstrap.sh --all`: Start all the services
+- `./bootstrap.sh --consul`: Only start consul
+- `./bootstrap.sh --nomad`: Only start nomad (requires consul)
 
