@@ -1,0 +1,33 @@
+version: '2'
+services:
+  consul:
+    environment:
+      CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
+    image: consul
+    command: 'agent -server -retry-join=consul -ui -bootstrap-expect=3'
+  consul_client:
+    environment:
+      CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
+    image: consul
+    command: 'agent -retry-join=consul -ui -bind=0.0.0.0 -client=0.0.0.0'
+    ports:
+      - '8500:8500'
+  nomad:
+    build:
+      dockerfile: assets/nomad/nomad.dockerfile
+      context: .
+    command: '/start.sh server'
+    links:
+      - 'consul_client:consul'
+  nomad_client:
+    build:
+      dockerfile: assets/nomad/nomad.dockerfile
+      context: .
+    command: '/start.sh client'
+    links:
+      - 'consul_client:consul'
+      - 'nomad:nomad'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    ports:
+      - '4646:4646'
